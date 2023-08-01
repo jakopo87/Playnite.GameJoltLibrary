@@ -65,8 +65,13 @@ public class LibraryGamesProvider
                     Name = ownedGame.Title,
                     IsInstalled = false,
                     Links = new List<Link> { new Link("Game Jolt Store Page", ownedGame.StorePageLink) },
-                    Developers = new HashSet<MetadataProperty> { new MetadataNameProperty(ownedGame.Developer.DisplayName) }
+                    Developers = new HashSet<MetadataProperty> { new MetadataNameProperty(ownedGame.Developer.DisplayName) },
+                    //ReleaseDate = new ReleaseDate(new DateTime(ownedGame.PublishedOn))
                 };
+                if (ownedGame.PublishedOn != null)
+                {
+                    game.ReleaseDate = new ReleaseDate(DateTimeOffset.FromUnixTimeMilliseconds(ownedGame.PublishedOn.Value).DateTime);
+                }
 
                 games.Add(game);
             }
@@ -90,7 +95,7 @@ public class LibraryGamesProvider
         while (currentPage <= totalPages)
         {
             var gamesOnPage = GetGamesFromApi(httpClient, getGamesUrl, currentPage, out int totalGames, out int gamesPerPage, cancelToken);
-            games.AddRange(gamesOnPage); 
+            games.AddRange(gamesOnPage);
 
             if (isFirstRequest)
             {

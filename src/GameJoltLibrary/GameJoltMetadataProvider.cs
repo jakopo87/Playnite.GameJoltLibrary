@@ -123,6 +123,12 @@ namespace GameJoltLibrary
             // Description
             metadata.Description = GetDescription(game.Name, gameJoltMetadata.StorePageLink);
 
+            // Release Date
+            if (gameJoltMetadata.PublishedOn != null)
+            {
+                metadata.ReleaseDate = new ReleaseDate(DateTimeOffset.FromUnixTimeMilliseconds(gameJoltMetadata.PublishedOn.Value).DateTime);
+            }
+
             metadata.Links.Add(new Link("Game Jolt Store Page", gameJoltMetadata.StorePageLink));
         }
 
